@@ -1,23 +1,23 @@
-# SDS Configuration
+# SDS Configuration - Streamlit Cloud optimised
 
 video:
-  source: 0  # 0 = webcam, "rtsp://..." for IP camera, "video.mp4" for file
+  source: 0
   fps: 30
   resize_width: 1280
   resize_height: 720
 
 detection:
-  model: "yolov8s.pt"  # nano (fastest), s, m, l, x
-  confidence: 0.2
+  model: "yolov8n.pt"        # nano - committed to repo
+  confidence: 0.3
   iou_threshold: 0.45
-  classes: [0]  # 0 = person in COCO
-  device: "cpu"  # cuda or cpu
-  imgsz: 960       # larger input size for better recall on crowds
-  augment: true    # enable TTA for prediction on images
-  max_det: 1000    # allow many people in dense scenes
-  tta_scales: [1.0, 1.25]   # additional test-time scales (relative to imgsz)
-  flip_tta: true            # also run a horizontal flip pass
-  nms_iou: 0.55             # IoU for NMS when merging TTA outputs
+  classes: [0]               # 0 = person in COCO
+  device: "cpu"              # Streamlit Cloud has no GPU
+  imgsz: 640
+  augment: false             # disable TTA on cloud (too slow on CPU)
+  max_det: 300
+  tta_scales: [1.0]
+  flip_tta: false
+  nms_iou: 0.55
 
 tracking:
   max_age: 30
@@ -25,7 +25,7 @@ tracking:
   max_iou_distance: 0.7
   max_cosine_distance: 0.3
   nn_budget: 100
-  use_appearance: true
+  use_appearance: false      # disable mobilenet embedder - no GPU on cloud
 
 density:
   enabled: true
@@ -72,7 +72,7 @@ visualization:
   line_thickness: 1
 
 output:
-  save_video: true
+  save_video: false
   output_dir: "results"
   show_fps: true
   log_events: true
